@@ -348,6 +348,32 @@ describe('Dashboard', () => {
     });
   });
 
+  describe('density toggle', () => {
+    it('defaults to comfortable density', () => {
+      render(<Dashboard />);
+
+      expect(screen.getByRole('main')).toHaveAttribute('data-density', 'comfortable');
+      expect(screen.getByTestId('density-toggle')).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    it('switches to compact and updates the shared settings store', () => {
+      render(<Dashboard />);
+
+      fireEvent.click(screen.getByTestId('density-toggle'));
+
+      expect(screen.getByRole('main')).toHaveAttribute('data-density', 'compact');
+      expect(useSettingsStore.getState().compactMode).toBe(true);
+    });
+
+    it('reflects a compact preference set from Settings', () => {
+      useSettingsStore.setState({ compactMode: true });
+      render(<Dashboard />);
+
+      expect(screen.getByRole('main')).toHaveAttribute('data-density', 'compact');
+      expect(screen.getByTestId('density-toggle')).toHaveAttribute('aria-pressed', 'true');
+    });
+  });
+
   describe('mode toggle & persistence', () => {
     it('renders mode toggle on the dashboard header', () => {
       render(<Dashboard />);

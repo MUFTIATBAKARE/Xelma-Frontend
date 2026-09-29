@@ -16,7 +16,7 @@ import BetModal from "../components/BetModal";
 import EndRoundModal from "../components/EndRoundModal";
 import RoundTimeline from "../components/RoundTimeline";
 import EventLogDrawer from "../components/EventLogDrawer";
-import { Radio } from "lucide-react";
+import { Radio, Rows3 } from "lucide-react";
 import { ChatSidebar } from "../components/ChatSidebar";
 import { ConnectionStatus } from "../components/ConnectionStatus";
 import { useConnectionStatus } from "../hooks/useConnectionStatus";
@@ -24,7 +24,11 @@ import { useRoundStore } from "../store/useRoundStore";
 import type { Round, UserPrediction, UserStats } from "../lib/api-client";
 import { educationApi, statsApi, predictionsApi } from "../lib/api-client";
 import { useWalletStore, selectIsWalletConnected } from "../store/useWalletStore";
-import { useSettingsStore, selectSoundEnabled } from "../store/useSettingsStore";
+import {
+  useSettingsStore,
+  selectSoundEnabled,
+  selectCompactMode,
+} from "../store/useSettingsStore";
 import {
   bindSoundPreference,
   clearSoundPreferenceBinding,
@@ -270,6 +274,8 @@ const Dashboard = () => {
   const [inspector, setInspector] = useState<SorobanInspectorSnapshot | null>(null);
   const [isInspectorLoading, setIsInspectorLoading] = useState(false);
   const soundEnabled = useSettingsStore(selectSoundEnabled);
+  const compactMode = useSettingsStore(selectCompactMode);
+  const setCompactMode = useSettingsStore((s) => s.setCompactMode);
 
   // Asset tab state from URL query param
   const [searchParams] = useSearchParams();
@@ -510,7 +516,11 @@ const Dashboard = () => {
   }, [resolvedRound, endRoundResult.isWin, soundEnabled]);
 
   return (
-    <main id="main-content" className="xelma-grid-bg min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+    <main
+      id="main-content"
+      data-density={compactMode ? "compact" : "comfortable"}
+      className="xelma-grid-bg min-h-screen px-4 py-8 sm:px-6 lg:px-8"
+    >
       {/* Opt-in community chat (ported from the legacy /play view). Self-positions
           as a fixed slide-over, so mounting it does not shift the terminal layout. */}
       {isChatOpen && <ChatSidebar />}
@@ -558,7 +568,17 @@ const Dashboard = () => {
         {/* Round lifecycle timeline, ported from /play. */}
         {!isLoading && (
           <div className="mb-6">
-            <div className="mb-3 flex justify-end gap-2">
+            <div className="mb-3 flex flex-wrap justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setCompactMode(!compactMode)}
+                aria-pressed={compactMode}
+                data-testid="density-toggle"
+                className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-gray-400 transition-colors hover:border-[#2C4BFD]/40 hover:text-white aria-pressed:border-[#2C4BFD]/40 aria-pressed:text-white"
+              >
+                <Rows3 className="h-4 w-4" aria-hidden />
+                {compactMode ? "Compact view" : "Comfortable view"}
+              </button>
               <button
                 type="button"
                 onClick={() => setIsOpenPositionsOpen(true)}
