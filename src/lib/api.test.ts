@@ -142,7 +142,7 @@ describe('apiFetch', () => {
     
     // Test the onClick behavior
     const originalLocation = window.location;
-    // @ts-ignore - overriding window.location for test
+    // @ts-expect-error - overriding window.location for test
     delete window.location;
     window.location = { href: '' } as Location;
     options.action.onClick();

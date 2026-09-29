@@ -289,7 +289,7 @@ const Leaderboard = () => {
                   {user.avatar ? (
                     <img src={user.avatar} alt={`${medal} medal: ${user.name}`} className="w-full h-full object-cover" />
                   ) : (
-                    <IdenticonAvatar id={user.id} className="w-full h-full object-cover" />
+                    <IdenticonAvatar address={user.id} name={user.name} className="w-full h-full object-cover" />
                   )}
                 </div>
                 <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-cyan-500 text-white text-sm font-extrabold py-1 px-3.5 rounded-full shadow-[0_0_14px_rgba(6,182,212,0.45)] z-20 whitespace-nowrap min-w-[32px] text-center border-2 border-[#0A0F1A]">
@@ -360,7 +360,7 @@ const Leaderboard = () => {
                               className="w-full h-full object-cover"
                             />
                           ) : (
-                            <IdenticonAvatar id={user.id} className="w-full h-full object-cover" />
+                            <IdenticonAvatar address={user.id} name={user.name} className="w-full h-full object-cover" />
                           )}
                         </div>
                         <span className="font-bold text-white text-lg group-hover:text-cyan-200 transition-colors truncate">
